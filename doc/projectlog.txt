@@ -1,0 +1,16 @@
+Projectlog
+==========
+
+Introduction
+------------
+5.9.2014
+
+Constructing three dimensional models by lasercutting shapes out of plywood and MDF. That is the idea of this project on the highest level of abstraction. I already have a version of the program working, but with the limitation that it can only handle models that are convex in their shape. This log will be more about the development process than the math and code that goes to the program.
+
+I have started a scrum-like development strategy in order to keep myself motivated and advance the project in a sufficent speed. I have the backlist "ICE_BOX.txt" and a sprint goal list "TODO.txt". The TODO list is also divided into sections "SPRINT", "WORK IN PROGRESS", "READY FOR TESTING", and "DONE".
+
+Refactoring
+-----------
+19.9.2014
+
+I've cleaned up my code. I made the modules more independent and the dependencies between modules more easily understandable. Now i have a strict directory structure and style for my header files.

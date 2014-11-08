@@ -1,0 +1,17 @@
+========== SPRINT ===========
+----due sunday 14.9----------
+
+packing the connectors
+
+packing triangles
+	transformations
+	packing algorithm
+
+======== IN PROGRESS  ========
+
+
+======== TO BE TESTED ========
+
+
+============ DONE ============
+

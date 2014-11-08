@@ -1,0 +1,21 @@
+========== SPRINT ===========
+----due sunday 7.9 ----------
+
+
+======== IN PROGRESS  ========
+
+
+======== TO BE TESTED ========
+
+inset triangle edges
+
+============ DONE ============
+
+draw connector outlines
+draw connector text
+draw triangle edges
+draw triangle holes
+make a font
+make an svg "puts" function
+draw triangle text
+transforming the triangles according to layout
