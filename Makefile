@@ -7,7 +7,7 @@ DEPS=
 bin/%.o: src/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 	
-main.exe: \
+explision: \
 	bin/struct/model.o \
 	bin/struct/shape.o \
 	bin/struct/vector.o \

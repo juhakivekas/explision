@@ -3,6 +3,7 @@
 
 //system dependencies
 #include <math.h>
+#include <stdlib.h>
 
 //project dependencies
 #include "../material.h"

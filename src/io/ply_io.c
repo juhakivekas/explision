@@ -1,5 +1,6 @@
 #include "ply_io.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
 
@@ -62,6 +63,10 @@ void ply_write_model(model* m, char* filename){
 
 model* ply_read_model(char* filename){
 	FILE* fp = fopen(filename, "r");
+	if(fp == NULL){
+		printf("Opening file %s failed.\n", filename);
+		exit(1);
+	}
 	char line[100];
 	model* m = malloc(sizeof(model));
 

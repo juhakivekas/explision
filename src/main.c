@@ -2,6 +2,9 @@
 		#include <string.h>
 
 int main(int argc, char* argv[]){
+	if(argc != 2){
+		printf("Please provide .ply filename.\n");
+	}
 	model* m = ply_read_model(argv[1]);
 	int i = 0;
 	for(i=0; i<m->nfaces; i++){

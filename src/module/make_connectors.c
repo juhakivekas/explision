@@ -2,6 +2,10 @@
 
 void print_connector_table(int nshapes, shape** shapes){
 	FILE* fp = fopen("design_files/connections.txt", "w");
+	if(fp == NULL){
+		printf("Failed to open writeable file design_files/connections.txt\n");
+		exit(1);
+	}
 
 	int i, j;
 	fprintf(fp, "Shape connective table\n");
@@ -145,7 +149,7 @@ void make_connectors(int nshapes, shape** shapes){
 		//finish outline path
 		fprintf(fp, "\"/>\n");
 		//add the angle as text
-		sprintf(text, "%d", (int) ((connectors[i]/TWO_PI)*360));
+		sprintf(text, "%.0f", ((connectors[i]/TWO_PI)*360));
 		svg_puts(fp, text, 0.5, 5);
 		//close container group
 		fprintf(fp, "</g>\n");

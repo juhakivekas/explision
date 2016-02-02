@@ -14,3 +14,15 @@ Refactoring
 19.9.2014
 
 I've cleaned up my code. I made the modules more independent and the dependencies between modules more easily understandable. Now i have a strict directory structure and style for my header files.
+
+Defrosting
+----------
+7.11.2014
+
+I'm now taking a new step on this frozen project. Insetting the triangles in order to build concave shapes had an unwanted side effect, namely that the connector placement would not line up in adjacent printed shapes. The reason for this is that the sides of two adjacent inset triangles are no always equal (they are equal very seldomly) in length. This can be taken into account by saving both the original corners and the inset corners. This is the scope of my next refactoring.
+
+Presentation
+------------
+2.2.2016
+
+I was at the Aalto FABLAB monthly general meeting today and did a short presentation on this project. It was nice to get feedback from other people and it got me thinking i could advance this project as I try to enable other users to use it. This is a very nice way to prioritize things and will make motivate me to develope this futher.

@@ -77,15 +77,19 @@ double angle(face* f, face* g){
 }
 
 void inset(shape* s){
-	vector new_crn[s->ncrn];
+	//TODO: seriouysly! write down the math somewhere!
 	int i;
 	double cos_t;
 	vector a_unit, b_unit, b_norm;
+	int curr_i, next_i, prev_i;
 	vector *curr, *next, *prev;
 	for(i=0; i<s->ncrn; i++){
-		prev = &(s->crn[(i+0)%s->ncrn]);
-		curr = &(s->crn[(i+1)%s->ncrn]);
-		next = &(s->crn[(i+2)%s->ncrn]);
+		prev_i = (i+0)%s->ncrn;
+		curr_i = (i+1)%s->ncrn;
+		next_i = (i+2)%s->ncrn;
+		prev = &(s->crn[prev_i]);
+		curr = &(s->crn[curr_i]);
+		next = &(s->crn[next_i]);
 
 		a_unit.x = next->x - curr->x;
 		a_unit.y = next->y - curr->y;
@@ -99,14 +103,10 @@ void inset(shape* s){
 
 		cos_t = 1/vector_dot_product(&a_unit, &b_norm);
 		
-		new_crn[(i+1)%s->ncrn].x = curr->x;
-		new_crn[(i+1)%s->ncrn].y = curr->y;
-		vector_add_mul(&new_crn[(i+1)%s->ncrn], &a_unit, -cos_t * tan(s->conn_t[(i+0)%s->ncrn]/2) * MAT);
-		vector_add_mul(&new_crn[(i+1)%s->ncrn], &b_unit, -cos_t * tan(s->conn_t[(i+1)%s->ncrn]/2) * MAT);
-	}
-	for(i=0; i<s->ncrn; i++){
-		s->crn[i].x = new_crn[i].x - new_crn[0].x;
-		s->crn[i].y = new_crn[i].y - new_crn[0].y;
+		s->crn_inset[curr_i].x = curr->x;
+		s->crn_inset[curr_i].y = curr->y;
+		vector_add_mul(&s->crn_inset[curr_i], &a_unit, -cos_t * s->conn_inset[prev_i] * MAT/2);
+		vector_add_mul(&s->crn_inset[curr_i], &b_unit, -cos_t * s->conn_inset[curr_i] * MAT/2);
 	}
 }
 
@@ -129,11 +129,15 @@ void make_shapes(model* m, shape** shapes){
 			s->conn[j] = find_neighbour(j, f, m);
 			if(s->conn[j] != -1){
 				s->conn_t[j] = angle(f, m->faces[s->conn[j]]);
+				s->conn_inset[j] = tan(s->conn_t[j]/2);
+				if(s->conn_inset[j] < 0){
+					s->conn_inset[j] = -s->conn_inset[j];
+				}
 			}
 		}
 		//----inset sides to enable building concave shapes
 		//placement of connector holes is not as simple when we inset the tri's
 		//uncomment for futher development
-		//inset(s);
+		inset(s);
 	}
 }

@@ -1,15 +1,5 @@
-========== SPRINT ===========
-----due sunday 7.9 ----------
-
-
-======== IN PROGRESS  ========
-
-
-======== TO BE TESTED ========
-
-inset triangle edges
-
 ============ DONE ============
+07.09.2014
 
 draw connector outlines
 draw connector text
