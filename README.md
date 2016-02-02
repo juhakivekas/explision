@@ -2,7 +2,7 @@ Explision
 ---------
 
 This program will explode your models for you so that you can then build
-them back toghether from magnificent lasercut triangles of plywood, acryl or
+Them back together from magnificent lasercut triangles of plywood, acrylic or
 MDF. The tool is meant for making physical models of any 3D model.
 
 Compiling
@@ -18,18 +18,18 @@ Running
 
 If you are running the program to make printable pieces make sure to edit
 the configuration file to match your material measurements and the kerf of
-your cut. The default settings are for 4mm MDF.
+Your cut. The default settings are for 4mm MDF.
 
 Running the code is as simple as this:
 
 	./explision yourmodel.ply
 
 Unfortunately the file parser is very picky about the format of the model
-files it is given. The program takes input files in the PLY (stanford
+Files it is given. The program takes input files in the PLY (stanford
 polygon file format) and outputs SVG drawings.
 
 For preprocessing the models MeshLab has been used. It's an opensource
-program for processing 3D models and data. The refetence format used in
+program for processing 3D models and data. The reference format used in
 development is the ply files that meshlab exports when using the default
 settings and unchecking the "Binary encoding" box. MeshLab should be able to
 open pretty much anything, so it can be used to convert files.
@@ -41,8 +41,8 @@ your model measures 157.65 in meshlab, it will be that many millimeters wide.
 Printing
 --------
 
-Open the svg files from the design_files directory in your favourite vector
-grapgics editor, like GIMP. Then combine all the pieces and do some manual
+Open the svg files from the design_files directory in your favorite vector
+graphics editor, like GIMP. Then combine all the pieces and do some manual
 ordering if needed.
 
 - The red lines should be cut first, with a low power setting on the laser
@@ -55,14 +55,14 @@ cutting.
 - The black borders should be cut last.
 
 There is probably a "select by colour" tool in your editor, that should make
-printing onlt parts at a time easy. Make sure not to move the material between
+printing only parts at a time easy. Make sure not to move the material between
 rounds.
 
-Constructuing
--------------
+Constructing
+------------
 
 The numbers on the triangles have meaning. The markings are a way to document
-the way the pieces go togheter. Let's look at this by an example:
+the way the pieces go together. Let's look at this by an example:
 
 ![Example of a triangle](./doc/example_trianlge.png)
 
@@ -71,7 +71,7 @@ triangles 14, 3 and 18. The connections start above the arrow and we count in
 the direction of the arrow. The other column of numbers is the angle of the
 connector that should be used for that specific connection.
 
-So the top edge is connected to triangle 14 with a connector fot 38 degrees. The
+So the top edge is connected to triangle 14 with a connector for 38 degrees. The
 triangle 14 will have a similar printout so we'll know what edge to connect to.
 The next edge, moving clockwise on the edge is connected to triangle number 3
 with a degree of 36 degrees. Finally the last edge connects to piece 18 with an
@@ -84,7 +84,7 @@ negative degrees are not a bug, but a feature.
 
 Limitations
 -----------
-The only known limitations are printbed size and very sharp angles. Concave 
+The only known limitations are printed size and very sharp angles. Concave 
 shapes should be working, but haven't been tested.
 
 Contact
@@ -92,4 +92,4 @@ Contact
 
 If you want to contribute, feel free to check out the TODO and ICE_BOX lists.
 For any questions, suggestions or offered help send me mail:
-juha.kivekäs@helsinki.fi
+juha.kivekas@helsinki.fi
