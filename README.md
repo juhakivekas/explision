@@ -64,7 +64,7 @@ Constructuing
 The numbers on the triangles have meaning. The markings are a way to document
 the way the pieces go togheter. Let's look at this by an example:
 
-![Example of a triangle](./doc/example_trianlge.svg)
+![Example of a triangle](./doc/example_trianlge.png)
 
 Now this is triangle number ten in the model, and it has connections to
 triangles 14, 3 and 18. The connections start above the arrow and we count in
