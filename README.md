@@ -3,8 +3,7 @@ Explision
 
 This program will explode your models for you so that you can then build
 them back toghether from magnificent lasercut triangles of plywood, acryl or
-MDF. The tool is meant for making physical models of any 3D model. The only
-known limitations are printbed size and very sharp angles.
+MDF. The tool is meant for making physical models of any 3D model.
 
 Compiling
 ---------
@@ -83,8 +82,14 @@ puzzle. A good tip is to start with sorting the connector pieces into piles for
 0-10, 10-20, 20-30, etc. degrees, it really speeds things up. Also note that
 negative degrees are not a bug, but a feature.
 
+Limitations
+-----------
+The only known limitations are printbed size and very sharp angles. Concave 
+shapes should be working, but haven't been tested.
+
 Contact
 -------
 
+If you want to contribute, feel free to check out the TODO and ICE_BOX lists.
 For any questions, suggestions or offered help send me mail:
 juha.kivekäs@helsinki.fi
