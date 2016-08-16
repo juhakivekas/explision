@@ -13,6 +13,8 @@ To compile the code, just run make from the commandline
 	cd path/to/this/directory/
 	make
 
+You might have to create the build and run directories
+
 Running
 -------
 
