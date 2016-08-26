@@ -4,11 +4,32 @@ OPENMESH_SRC=$(OPENMESH)/src
 #since the software will be compiled and ran by non-technical people.
 OPENMESH_LIB=$(OPENMESH)/build/Build/lib/libOpenMeshCore.a
 
-CGFLAGS=--std=c++11 -g -Wall -DOM_STATIC_BUILD -Wno-unused-variable
+CGFLAGS=--std=c++11 -g -Wall -DOM_STATIC_BUILD -Wno-unused-variable 
 CPPC=g++
-all:
-	$(CPPC) $(CGFLAGS) -o OpenMesh_test src/OpenMesh_test.cpp src/jsoncpp.cpp $(OPENMESH_LIB) -I $(OPENMESH_SRC)
 
-meshopen:
-	$(CPPC) $(CGFLAGS) -o meshopen src/meshopen.cc $(OPENMESH_LIB) -I $(OPENMESH_SRC)
+explision:                      \
+	src/main.o                  \
+	src/jsoncpp.o               \
+	src/struct/shape.o          \
+	src/struct/vector.o         \
+	src/module/make_shapes.o    \
+	src/module/pack_shapes.o    \
+	src/module/draw_shapes.o    \
+	src/module/make_connectors.o\
+	src/io/svg_io.o
+	$(CPPC) $(CGFLAGS) -o $@ $^ $(OPENMESH_LIB)
+
+%.o:%.cpp
+	$(CPPC) $(CGFLAGS) -c -o $@ $^ -I $(OPENMESH_SRC)
+
+%.o:%.c
+	$(CPPC) $(CGFLAGS) -c -o $@ $^ -I $(OPENMESH_SRC) 
+
+tester:src/tester.cpp
+	$(CPPC) $(CGFLAGS) -o $@ $^ $(OPENMESH_LIB) -I $(OPENMESH_SRC)
+
+clean:
+	rm -f explision
+	rm -f src/*.o
+	rm -f src/*/*.o
 	

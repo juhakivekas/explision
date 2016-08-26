@@ -42,10 +42,10 @@ void draw_shapes(shape** shapes, transform* layout, int nshapes){
 	
 
 		fprintf(fp, "<path stroke=\"black\" d=\"");		//start edges
-		fprintf(fp, "M %.2f %.2f ", s->crn_inset[0].x, s->crn_inset[0].y);
+		fprintf(fp, "M %.2f %.2f ", s->crn[0].x, s->crn[0].y);
 		for(j=1; j<s->ncrn; j++){
 			fprintf(fp, "L %.2f %.2f ",
-				s->crn_inset[j].x, s->crn_inset[j].y
+				s->crn[j].x, s->crn[j].y
 			);
 		}
 		fprintf(fp, "z\" />\n");						//close edges
@@ -63,8 +63,8 @@ void draw_shapes(shape** shapes, transform* layout, int nshapes){
 			s->conn[2], s->conn_t[2]/TWO_PI*360
 		);
 		svg_puts(fp, info, 
-			(s->crn_inset[0].x+s->crn_inset[1].x)/2 - 3.5*2,
-			(s->crn_inset[0].y+s->crn_inset[1].y)/2 + 2);
+			(s->crn[0].x+s->crn[1].x)/2 - 3.5*2,
+			(s->crn[0].y+s->crn[1].y)/2 + 2);
 		fprintf(fp, "</g>\n");							//close container
 	}
 	fprintf(fp, "</g>\n");

@@ -2,7 +2,7 @@
 #define shape_h
 #include "vector.h"
 
-typedef struct shapie{
+typedef struct shape{
 	vector* crn;
 	vector* crn_inset;
 	int ncrn;

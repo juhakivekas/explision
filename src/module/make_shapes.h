@@ -7,10 +7,10 @@
 
 //project dependencies
 #include "../material.h"
-#include "../struct/model.h"
 #include "../struct/shape.h"
 #include "../struct/vector.h"
+#include "../ExpMesh.hh"
 
-void make_shapes(model* m, shape** shapes);
+void make_shapes(ExpMesh &m, shape** shapes);
 
 #endif /*make_shapes_h*/
