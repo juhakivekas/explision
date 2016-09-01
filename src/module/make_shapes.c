@@ -1,15 +1,21 @@
 #include "make_shapes.h"	
+#include <cmath>
 #include <iostream>
 
 void project_to(ExpMesh model, const OpenMesh::FaceHandle &fh, shape* s){
-	//std::cout << fh.idx() << std::endl;
-	//too compact to be understandable?
+	OpenMesh::HalfedgeHandle edge0 = model.halfedge_handle(fh);
+	OpenMesh::HalfedgeHandle edge1 = model.next_halfedge_handle(edge0);
+	
+	double len0, len1, angle;
+	len0  = model.data(model.edge_handle(edge0)).length();
+	len1  = model.data(model.edge_handle(edge1)).length();
+	angle = model.calc_sector_angle(edge0);
 	s->crn[0].x = 0;
 	s->crn[0].y = 0;
-	s->crn[1].x = 100;//length of the first side
+	s->crn[1].x = len0;//length of the first side
 	s->crn[1].y = 0;
-	s->crn[2].x = 50; //vertex_dot_product(&v, &u)/ s->crn[1].x;
-	s->crn[2].y = 50; //sqrt(vertex_dot_product(&u, &u) - (s->crn[2].x * s->crn[2].x));
+	s->crn[2].x = std::cos(angle) * len1;//length of the other side in the direction of 'angle'
+	s->crn[2].y = std::sin(angle) * len1;
 }
 /*
 void inset(shape* s){
