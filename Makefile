@@ -1,7 +1,8 @@
-OPENMESH=/home/juha/Repos/OpenMesh
+#XXX change this to the path of your OpenMesh installation XXX
+OPENMESH=~/Repos/OpenMesh
+
+#We are building with static libraries to make dependency management easier
 OPENMESH_SRC=$(OPENMESH)/src
-#We are building with static archives to make dependency management easier
-#since the software will be compiled and ran by non-technical people.
 OPENMESH_LIB=$(OPENMESH)/build/Build/lib/libOpenMeshCore.a
 
 CGFLAGS=--std=c++11 -g -Wall -DOM_STATIC_BUILD -Wno-unused-variable 

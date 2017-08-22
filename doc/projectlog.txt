@@ -35,4 +35,14 @@ This project is so cool it refuses to die. I've recently learned from programmin
 
 The code already kindof relies on MeshLab for the correct formatting of the ply files, so I might as well use their parsers and data structures. Maybe I'll even start writing C++14.
 
-The good options for 
+Showah
+------
+10.03.17 13:08
+
+Jason asked for a shower box done with explision.
+Unfortunately I'm all up in other projects, but I'll give it some time.
+
+22.08.17 21:02
+I actually finished this project and it turned out great!
+https://www.twitter.com/_guttula/status/847867130272002050
+I'm finally committing my changes to that were done for that project.

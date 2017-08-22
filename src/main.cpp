@@ -39,13 +39,25 @@ void read_mesh(ExpMesh &model, std::string filename){
 	OpenMesh::IO::read_mesh(model, filename, readOptions);
 
 	//pre-calculate all edge lengths and angles
-	for(auto eIt = model.edges_begin(); eIt != model.edges_end(); ++eIt){
-		model.data(*eIt).set_length(model.calc_edge_length(*eIt));
-		model.data(*eIt).set_angle( model.calc_dihedral_angle(*eIt));
+	for(auto edge : model.edges()){
+		model.data(edge).set_length(model.calc_edge_length(edge));
+		model.data(edge).set_angle( model.calc_dihedral_angle(edge));
 	}
 
-	//TODO reorder the face halfedge hanles so that the first one is the
-	//longest.
+	//reorder the face halfedge handles so that the first one is the longest.
+	for(auto face : model.faces()){
+		int maxlen = 0;
+		for(auto halfedge: model.fh_range(face)){
+			int len = model.data(model.edge_handle(halfedge)).length();
+			if(len > maxlen){
+				maxlen = len;
+				model.set_halfedge_handle(face, halfedge);
+			}
+		}
+	}
+	//calculate projected face coordinates
+	
+	//calculate projected and original shape incircle centers
 }
 
 int main(int argc, char* argv[]){

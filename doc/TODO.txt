@@ -1,17 +1,19 @@
-========== SPRINT ===========
+==========  TODO  =========== 
+
+add reference measurement of 10mm to files!
+configure connectors to be on the inside/outside
 
 packing the connectors
-
 packing triangles
 	transformations
 	packing algorithm
 
+inset triangle edges - BROKEN
+document the hardcoded parts of the program (triangle expectations)
+documenting all the math that is used it he process
+checking that holes (and text) of triangles don't overlap
+Texture mapping (completely fucking awesome)
+Casting (in plaster)
+
 ======== IN PROGRESS  ========
-
-
-======== TO BE TESTED ========
-
-inset triangle edges
-
-============ DONE ============
 

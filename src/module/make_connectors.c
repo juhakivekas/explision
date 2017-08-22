@@ -133,12 +133,13 @@ void make_connectors(int nshapes, shape** shapes){
 	//make the outlines of each connector
 	char text[10];
 	fprintf(fp, "<g transform=\"scale(%f)\">", PT_TO_MM);
-	for(i=0; i<nconn; i++){
+	for(i=0; i<nconn; i+=2){
 		//start container group
 		fprintf(fp, "<g fill=\"none\" stroke=\"black\" transform=\"translate(%.2f, %.2f)\">\n", 0.0, i*10.0);
 		//start outline
 		fprintf(fp, "<path  d=\"");
 		//find out what connector type to use and print the path
+		//connectors[i] = - connectors[i];//XXX umcomment to invert connectors (inside/outside)
 		if(     connectors[i] > TWO_PI/3 ) conn_t1(fp, connectors[i]);
 		else if(connectors[i] > TWO_PI/4 ) conn_t2(fp, connectors[i]);
 		else if(connectors[i] > 0        ) conn_t3(fp, connectors[i]);
@@ -149,7 +150,8 @@ void make_connectors(int nshapes, shape** shapes){
 		//finish outline path
 		fprintf(fp, "\"/>\n");
 		//add the angle as text
-		sprintf(text, "%.0f", ((connectors[i]/TWO_PI)*360));
+		//sprintf(text, "%.0f", ((connectors[i]/TWO_PI)*360));
+		sprintf(text, "%.0f", (((- connectors[i])/TWO_PI)*360));
 		svg_puts(fp, text, 0.5, 5);
 		//close container group
 		fprintf(fp, "</g>\n");
