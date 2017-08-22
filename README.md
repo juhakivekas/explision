@@ -23,7 +23,8 @@ If the above doesn't work, then follow the instructions found here:
 	http://www.openmesh.org/svn/
 	http://www.openmesh.org/Daily-Builds/Doc/index.html
 
-Open the Makefiel and edit the `OPENMESH` variable to point to your compiled library:
+Open the  Makefiel and edit the  `OPENMESH` variable to point  to your
+compiled library:
 
 	OPENMESH=~/Repos/OpenMesh
 
@@ -31,39 +32,31 @@ To compile the code, now just run make from the commandline:
 
 	make
 
-You might have to create the build and run directories when you compile the first time.
+You  might have  to  create the  build and  run  directories when  you
+compile the first time.
 
 Running
 -------
 
 If you are  running the program to make printable  pieces make sure to
 edit the  configuration file to  match your material  measurements and
-the kerf of Your cut. The default settings are for 4mm MDF.
+the kerf of your cut. The settings need to be set at `src/material.h`.
 
 Running the code is as simple as this:
 
 	./explision yourmodel.ply
 
-Unfortunately the  file parser is very  picky about the format  of the
-model Files  it is  given. The  program takes input  files in  the PLY
-(stanford polygon file format) and outputs SVG drawings.
+All file formats supported by OpenMesh can be used.
 
-For preprocessing the models MeshLab has been used. It's an opensource
-program for processing  3D models and data. The  reference format used
-in development  is the ply files  that meshlab exports when  using the
-default  settings and  unchecking the  "Binary encoding"  box. MeshLab
-should be  able to  open pretty much  anything, so it  can be  used to
-convert files.
-
-MeshLab also  has a measuring tool  that will measure the  size of the
-model.  In explision  the  measurements are  interpreted  as being  in
-millimeters, so if  your model measures 157.65 in meshlab,  it will be
-that many millimeters wide.
+MeshLab is an open source project  that has a measuring tool that will
+measure  the size  of the  model.  In explision  the measurements  are
+interpreted as being in millimeters,  so if your model measures 157.65
+in meshlab, it will be that many millimeters wide.
 
 Printing
 --------
 
-Open the  svg files from  the design_files directory in  your favorite
+Open the svg files from  the `design_files` directory in your favorite
 vector graphics editor, like GIMP. Then  combine all the pieces and do
 some manual ordering if needed.
 
