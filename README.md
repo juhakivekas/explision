@@ -23,7 +23,7 @@ If the above doesn't work, then follow the instructions found here:
 	http://www.openmesh.org/svn/
 	http://www.openmesh.org/Daily-Builds/Doc/index.html
 
-Open the  Makefiel and edit the  `OPENMESH` variable to point  to your
+Open the  Makefile and edit the  `OPENMESH` variable to point  to your
 compiled library:
 
 	OPENMESH=~/Repos/OpenMesh
@@ -32,7 +32,7 @@ To compile the code, now just run make from the commandline:
 
 	make
 
-You  might have  to  create the  build and  run  directories when  you
+You  might have  to  create the  `build` and  `run`  directories when  you
 compile the first time.
 
 Running
@@ -57,7 +57,7 @@ Printing
 --------
 
 Open the svg files from  the `design_files` directory in your favorite
-vector graphics editor, like GIMP. Then  combine all the pieces and do
+vector graphics editor, like Inkscape. Then  combine all the pieces and do
 some manual ordering if needed.
 
 - The red lines  should be cut first, with a low  power setting on the
