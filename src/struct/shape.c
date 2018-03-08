@@ -1,5 +1,5 @@
 #include "shape.h"
-#include <malloc.h>
+#include <stdlib.h>
 
 shape* shape_new(int n){
 	shape* s      = (shape*)  malloc(sizeof(shape));
