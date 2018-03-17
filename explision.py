@@ -1,6 +1,8 @@
 #!/bin/python2
 #This is explision, see README.md for usage.
-#It uses OpenMesh Python bindings:
+#If you wish to modify the mesh reding code, then please read the intro to
+#OpenMesh first, the datastructure isn't the simplest one, but it is very
+		#powerful for this application. Here's a few links:
 #https://www.openmesh.org/intro/
 #https://www.openmesh.org/media/Documentations/OpenMesh-Doc-Latest/a00020.html
 #https://www.openmesh.org/media/Documentations/OpenMesh-Doc-Latest/index.html
@@ -23,39 +25,35 @@ def main( shaper, inputfile ):
 		shape_edges = []
 		for halfedge in mesh.fh( face ):
 			edge = mesh.edge_handle( halfedge )
-			edge_length  = mesh.calc_edge_length( edge )
-			sector_angle = mesh.calc_sector_angle( halfedge )
-			if mesh.is_boundary( edge ):
-				#do not set dihedral angles for boundary edges
-				dihedral_angle = None
-			else:
-				dihedral_angle = mesh.calc_dihedral_angle( edge )
+			adjacent_face = mesh.face_handle(mesh.opposite_halfedge_handle( halfedge ))
+			#if this looks like magic, then ask Juha or read OpenMesh docs
 			shape_edges.append({
-				'length'      :edge_length,
-				'sector_angle':sector_angle,
-				'dihedral_angle'  :dihedral_angle
+				'index'         :adjacent_face.idx(),
+				'length'        :mesh.calc_edge_length( edge ),
+				'sector_angle'  :mesh.calc_sector_angle( halfedge ),
+				'dihedral_angle':mesh.calc_dihedral_angle( edge ),
+				'connected'     :not mesh.is_boundary( edge )
 			})
-		shapes.append(shaper.shape( shape_edges ))
+		shapes.append(shaper.shape( shape_edges, face.idx() ))
 
-	'''
 	#create connectors for of non-boundary edges
 	connectors = []
 	for edge in mesh.edges():
 		if not mesh.is_boundary( edge ):
 			connectors.append(shaper.make_connectors({
-				'dihedral_angle' = mesh.calc_dihedral_angle( edge ),
-				'length' = mesh.calc_edge_length( edge )
+				'dihedral_angle': mesh.calc_dihedral_angle( edge ),
+				'length':         mesh.calc_edge_length( edge )
 			}))
-	'''
-	open('shapes.svg', 'w').write(dump_svg(shapes))
+	open('shapes.svg',    'w').write(dump_svg(shapes))
+	open('conectors.svg', 'w').write(dump_svg(connectors))
 
 def dump_svg(elements):
 	svg = etree.Element('svg')
 	svg.set('id', 'svg')
 	svg.set('version', '1.1')
 	svg.set('xmlns', 'http://www.w3.org/2000/svg')
-	svg.set('width', '1000')
-	svg.set('height', '1000')
+	svg.set('width', '300')
+	svg.set('height', '300')
 	for element in elements:
 		svg.append(element)
 	return etree.tostring(svg, pretty_print=True, encoding='utf8')

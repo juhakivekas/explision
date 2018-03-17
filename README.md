@@ -42,34 +42,6 @@ perpendicular to the face edge. Defaults to material thickness.
 - `dpi` The dpi of the output SVG. Default is 90 to be compatible with
 Inkscape.
 
-Common issues
-------------
-- **dpi:**  All graphics software  seems to  use a different  dpi when
-converting  SVGs  into  their  internal  viewing  formats.  There's  a
-reference 10mm square int he files so  you can check that the scale of
-things is right.
-
-- **duplicate vertices:** Some 3D  modeling software save their models
-with duplicate  vertices. Open mesh works  with tightly interconnected
-meshed and does not do any deduplication, so you need to fix the model
-before processing it  with explision. In MeshLab  deduplication can be
-done  by  running  `Filters  → Cleaning  and  repairing  →  Remove
-Duplicated Vertex`.
-
-- **out of  scale meshes:** The units in the  mesh being processed are
-always interpreted  as being millimeters.  Make sure your model  is of
-appropriate size before processing it.  MeshLab has a `Measuring Tool`
-in the tool panel that can measure the size of models.
-
--  **incorrect  kerf** If  the  connectors  are  too loose  of  tight,
-the  kerf  measurement is  probably  off.  Take  a caliper,  run  some
-experiments, and do some math.
-
--  **inverted faces**  Sometimes  models have  faces  that are  facing
-inwards or that are facing  in inconsistent directions. Check that the
-face normals are facing outwards from the model. MeshLab has an option
-to view normals in `Render → Show Face Normals`.
-
 Printing
 --------
 Open the SVG files from  the `design_files` directory in your favorite
@@ -115,6 +87,40 @@ jigsaw  puzzle. A  good tip  is to  start with  sorting the  connector
 pieces  into piles  for 0-10,  10-20, 20-30,  etc. degrees,  it really
 speeds things up. Also note that negative degrees are not a bug, but a
 feature.
+
+Common issues
+------------
+- **dpi:**  All graphics software  seems to  use a different  dpi when
+converting  SVGs  into  their  internal  viewing  formats.  There's  a
+reference 10mm square int he files so  you can check that the scale of
+things is right.
+
+- **out of  scale meshes:** The units in the  mesh being processed are
+always interpreted  as being millimeters.  Make sure your model  is of
+appropriate size before processing it.  MeshLab has a `Measuring Tool`
+in the tool panel that can measure the size of models.
+
+-  **incorrect  kerf** If  the  connectors  are  too loose  of  tight,
+the  kerf  measurement is  probably  off.  Take  a caliper,  run  some
+experiments, and do some math.
+
+- **duplicate vertices:** Some 3D  modeling software save their models
+with duplicate  vertices. Open mesh works  with tightly interconnected
+meshed and does not do any deduplication, so you need to fix the model
+before processing it  with explision. In MeshLab  deduplication can be
+done  by  running  `Filters  → Cleaning  and  repairing  →  Remove
+Duplicated Vertex`.
+
+-  **inverted faces**  Sometimes  models have  faces  that are  facing
+inwards or that are facing  in inconsistent directions. Check that the
+face normals are facing outwards from the model. MeshLab has an option
+to view normals in `Render → Show Face Normals`.
+
+-  **non-planar  polygons** Qads  and  other  non trianlge  faces  are
+expected to be planar. If there are  faces where all points are not in
+a plane,  then there will  be glitches.  Make quads planar  or convert
+everthing to triangle meshes.
+
 
 Limitations
 -----------
