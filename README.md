@@ -1,64 +1,80 @@
 Explision
 ---------
-
 This program  will explode your  models for you  so that you  can then
 build  Them  back  together  from magnificent  lasercut  triangles  of
 plywood, acrylic or MDF. The tool  is meant for making physical models
 of any 3D model.
 
-Compiling
----------
-
-Install and compile the OpenMesh library
-
-	git clone https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh.git 
-	cd OpenMesh
-	mkdir build
-	cd build
-	cmake ..
-	make
-
-If the above doesn't work, then follow the instructions found here:
-
-	http://www.openmesh.org/svn/
-	http://www.openmesh.org/Daily-Builds/Doc/index.html
-
-Open the  Makefile and edit the  `OPENMESH` variable to point  to your
-compiled library:
-
-	OPENMESH=~/Repos/OpenMesh
-
-To compile the code, now just run make from the commandline:
-
-	make
-
-You  might have  to  create the  `build` and  `run`  directories when  you
-compile the first time.
-
 Running
 -------
+Using explision is as simple as this:
 
-If you are  running the program to make printable  pieces make sure to
-edit the  configuration file to  match your material  measurements and
-the kerf of your cut. The settings need to be set at `src/material.h`.
+	python3 explision.py config.json yourmodel.ply
 
-Running the code is as simple as this:
+All file formats supported by OpenMesh can be used as input.
 
-	./explision yourmodel.ply
+Configuration
+-------------
+There  are  two  mandatory  configurations   that  are  also  the  two
+most  important ones.  The defaults  of all  other configurations  are
+calculated based on material and kerf.
 
-All file formats supported by OpenMesh can be used.
+- `material` This is the thickness of the material in millimeters. The
+more accurate  this is,  the tighter  your model will  be, so  use two
+decimals of accuracy.
 
-MeshLab is an open source project  that has a measuring tool that will
-measure  the size  of the  model.  In explision  the measurements  are
-interpreted as being in millimeters,  so if your model measures 157.65
-in meshlab, it will be that many millimeters wide.
+- `kerf` This is the thickness of the cut that the laser does, usually
+between 0.05 and 0.25. This is harder to measure and will depend a lot
+on material, printer model and printing settings.
+
+There are  some less  obvious tweaks  that can be  done, but  that are
+really useful when needed:
+
+-  `connector_spacing` The  distance  between connectors  on an  edge.
+Defaults to 10 times the material thickness.
+
+- `connector_inset` The distance from the connector socket to the edge
+of the face. Defaults to material thickness.
+
+-  `connector_width`  The width  of  the  connector in  the  direction
+perpendicular to the face edge. Defaults to material thickness.
+
+- `dpi` The dpi of the output SVG. Default is 90 to be compatible with
+Inkscape.
+
+Common issues
+------------
+- **dpi:**  All graphics software  seems to  use a different  dpi when
+converting  SVGs  into  their  internal  viewing  formats.  There's  a
+reference 10mm square int he files so  you can check that the scale of
+things is right.
+
+- **duplicate vertices:** Some 3D  modeling software save their models
+with duplicate  vertices. Open mesh works  with tightly interconnected
+meshed and does not do any deduplication, so you need to fix the model
+before processing it  with explision. In MeshLab  deduplication can be
+done  by  running  `Filters  → Cleaning  and  repairing  →  Remove
+Duplicated Vertex`.
+
+- **out of  scale meshes:** The units in the  mesh being processed are
+always interpreted  as being millimeters.  Make sure your model  is of
+appropriate size before processing it.  MeshLab has a `Measuring Tool`
+in the tool panel that can measure the size of models.
+
+-  **incorrect  kerf** If  the  connectors  are  too loose  of  tight,
+the  kerf  measurement is  probably  off.  Take  a caliper,  run  some
+experiments, and do some math.
+
+-  **inverted faces**  Sometimes  models have  faces  that are  facing
+inwards or that are facing  in inconsistent directions. Check that the
+face normals are facing outwards from the model. MeshLab has an option
+to view normals in `Render → Show Face Normals`.
 
 Printing
 --------
-
-Open the svg files from  the `design_files` directory in your favorite
-vector graphics editor, like Inkscape. Then  combine all the pieces and do
-some manual ordering if needed.
+Open the SVG files from  the `design_files` directory in your favorite
+vector graphics editor, like Inkscape. Then combine all the pieces and
+do some manual ordering if needed.
 
 - The red lines  should be cut first, with a low  power setting on the
 laser because they are only  documenting the pieces and their relative
@@ -70,13 +86,12 @@ middle of the cutting.
 
 - The black borders should be cut last.
 
-There  is probably  a "select  by colour"  tool in  your editor,  that
-should make printing only parts at a  time easy. Make sure not to move
-the material between rounds.
+There is  probably a "select by  color" tool in your  editor that will
+make printing  only parts at  a time easy. Make  sure not to  move the
+material on the printing bed between rounds.
 
 Constructing
 ------------
-
 The numbers on  the triangles have meaning. The markings  are a way to
 document the  way the  pieces go  together. Let's look  at this  by an
 example:
@@ -89,10 +104,10 @@ we count in the direction of the arrow. The other column of numbers is
 the  angle of  the connector  that should  be used  for that  specific
 connection.
 
-So the top  edge is connected to  triangle 14 with a  connector for 38
+The  top edge  is connected  to triangle  14 with  a connector  for 38
 degrees. The  triangle 14 will have  a similar printout so  we'll know
-what edge to  connect to. The next edge, moving  clockwise on the edge
-is connected to triangle number 3 with a degree of 36 degrees. Finally
+what edge to connect to. The next edge clockwise from the first one is
+connected to  triangle number 3 with  a degree of 36  degrees. Finally
 the last edge connects to piece 18 with an angle of 31 degrees.
 
 Constructing the model might take some time but it's fun, a bit like a
@@ -103,12 +118,20 @@ feature.
 
 Limitations
 -----------
-The only  known limitations  are printed size  and very  sharp angles.
-Concave shapes should be working, but haven't been tested.
+Building  the model  is  not always  as quick  as  one might  imagine.
+Anything with more than 30 faces is going to take more than an hour to
+build and  anything with dimensions larger  than half a meter  is best
+done with more than one pair of hands. Large structures, such as those
+that  fit a  human, are  not  rigid. Even  if our  modeling and  shape
+generation  would be  perfect, the  truth is  that materials  flex and
+bend. Even if some things wobble, they are still structurally sane.
 
-Contact
--------
+Very sharp angles may lead to rattling corners in the structure and it
+might be  hard to make all  of the connectors  fir on a thin  strip of
+material. Concave shapes should be working, but haven't been tested.
 
-If you want to contribute, feel free to check out the `TODO` list.
-For  any questions, suggestions  or offered help send  me mail
-guth.smash@gmail.com or direct messages on twitter `@_guttula`
+Contributing
+------------
+Feel free to  raise issues and make pull requests.  For any questions,
+suggestions or  offered help send  me mail at  guth.smash@gmail.com or
+direct messages on twitter to `@_guttula`

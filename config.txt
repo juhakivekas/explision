@@ -1,4 +1,0 @@
-Material thickness:		4.07
-Laser kerf:				0.17
-Material width:			600
-Material height:		900
