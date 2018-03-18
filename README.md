@@ -1,7 +1,7 @@
 Explision
 ---------
 This program  will explode your  models for you  so that you  can then
-build  Them  back  together  from magnificent  lasercut  triangles  of
+build  them  back  together  from magnificent  lasercut  triangles  of
 plywood, acrylic or MDF. The tool  is meant for making physical models
 of any 3D model.
 
@@ -25,13 +25,13 @@ decimals of accuracy.
 
 - `kerf` This is the thickness of the cut that the laser does, usually
 between 0.05 and 0.25. This is harder to measure and will depend a lot
-on material, printer model and printing settings.
+on the material used as well as the printer model and settings.
 
 There are  some less  obvious tweaks  that can be  done, but  that are
 really useful when needed:
 
 - `socket_spacing` The distance between  sockets for the connectors of
-an edge. Defaults to 10 times the material thickness.
+an edge. Defaults to ten times the material thickness.
 
 - `socket_margin` The  lower limit of how  close a socket can  be to a
 shape corner. Defaults to `socket_spacing`.
@@ -110,7 +110,7 @@ experiments, and do some math.
 
 - **duplicate vertices:** Some 3D  modeling software save their models
 with duplicate  vertices. Open mesh works  with tightly interconnected
-meshed and does not do any deduplication, so you need to fix the model
+meshes and does not do any deduplication, so you need to fix the model
 before processing it  with explision. In MeshLab  deduplication can be
 done  by  running  `Filters  → Cleaning  and  repairing  →  Remove
 Duplicated Vertex`.
@@ -144,3 +144,17 @@ Contributing
 Feel free to  raise issues and make pull requests.  For any questions,
 suggestions or  offered help send  me mail at  guth.smash@gmail.com or
 direct messages on twitter to `@_guttula`
+
+References
+----------
+- [OpenMesh](https://www.openmesh.org/)
+is a generic and efficient  polygon mesh data structure that explision
+uses for measuring and handling of the mesh.
+
+- [SVG](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
+is an open  vector graphics format that explision uses  as it's output
+media.
+
+- [lxml](http://lxml.de/)
+is an XML processing library for python that is used to create the SVG
+files.
