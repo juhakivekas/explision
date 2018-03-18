@@ -30,17 +30,21 @@ on material, printer model and printing settings.
 There are  some less  obvious tweaks  that can be  done, but  that are
 really useful when needed:
 
--  `connector_spacing` The  distance  between connectors  on an  edge.
-Defaults to 10 times the material thickness.
+- `socket_spacing` The distance between  sockets for the connectors of
+an edge. Defaults to 10 times the material thickness.
 
-- `connector_inset` The distance from the connector socket to the edge
-of the face. Defaults to material thickness.
+- `socket_margin` The  lower limit of how  close a socket can  be to a
+shape corner. Defaults to `socket_spacing`.
 
 -  `connector_width`  The width  of  the  connector in  the  direction
 perpendicular to the face edge. Defaults to material thickness.
 
-- `dpi` The dpi of the output SVG. Default is 90 to be compatible with
-Inkscape.
+- `connector_inset` The distance from the connector socket to the edge
+of  the face.  Defaults to  material thickness.  This does  not affect
+connector shape in any way.
+
+-  `connector_margin` The  distance between  duplicate connectors.  If
+connectors overlap, then try playing with this.
 
 Printing
 --------
@@ -91,9 +95,9 @@ feature.
 Common issues
 ------------
 - **dpi:**  All graphics software  seems to  use a different  dpi when
-converting  SVGs  into  their  internal  viewing  formats.  There's  a
-reference 10mm square int he files so  you can check that the scale of
-things is right.
+converting SVGs into their internal viewing formats. There's an orange
+10mm reference square in the corner of the files so you can check that
+the scale of things is right.
 
 - **out of  scale meshes:** The units in the  mesh being processed are
 always interpreted  as being millimeters.  Make sure your model  is of
@@ -116,16 +120,15 @@ inwards or that are facing  in inconsistent directions. Check that the
 face normals are facing outwards from the model. MeshLab has an option
 to view normals in `Render → Show Face Normals`.
 
--  **non-planar  polygons** Qads  and  other  non trianlge  faces  are
+-  **non-planar  polygons** Qads  and  other  non triangle  faces  are
 expected to be planar. If there are  faces where all points are not in
 a plane,  then there will  be glitches.  Make quads planar  or convert
-everthing to triangle meshes.
-
+everything to triangle meshes.
 
 Limitations
 -----------
 Building  the model  is  not always  as quick  as  one might  imagine.
-Anything with more than 30 faces is going to take more than an hour to
+Anything with more than 20 faces is going to take more than an hour to
 build and  anything with dimensions larger  than half a meter  is best
 done with more than one pair of hands. Large structures, such as those
 that  fit a  human, are  not  rigid. Even  if our  modeling and  shape

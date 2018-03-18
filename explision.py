@@ -11,7 +11,8 @@ import json
 from openmesh import *
 from Shaper import Shaper
 
-def main( shaper, inputfile ):
+def parse_mesh( inputfile ):
+	'''this uses OpenMesh to do the complex 3D measurements and operations of explision'''
 	#read the mesh form the input file
 	mesh = TriMesh()
 	if not read_mesh( mesh, inputfile ):
@@ -20,6 +21,14 @@ def main( shaper, inputfile ):
 	shapes = []
 	for face in mesh.faces():
 		shape_edges = []
+		maxlength = 0
+		#reorder all faces to have their longest side as the the first edge
+		for halfedge in mesh.fh( face ):
+			length = mesh.calc_edge_length( mesh.edge_handle( halfedge ))
+			if length > maxlength:
+				maxlength = length
+				mesh.set_halfedge_handle(face, halfedge);
+		#calculate all informataion needed to draw a shape
 		for halfedge in mesh.fh( face ):
 			edge = mesh.edge_handle( halfedge )
 			adjacent_face = mesh.face_handle(mesh.opposite_halfedge_handle( halfedge ))
@@ -29,23 +38,20 @@ def main( shaper, inputfile ):
 				'length'        :mesh.calc_edge_length( edge ),
 				'sector_angle'  :mesh.calc_sector_angle( halfedge ),
 				'dihedral_angle':mesh.calc_dihedral_angle( edge ),
-				'connected'     :not mesh.is_boundary( edge )
+				'connected'     :not mesh.is_boundary( edge ),
+				'connectors'    :adjacent_face.idx() > face.idx()
 			})
-		shapes.append(shaper.shape( shape_edges, face.idx() ))
-
+		shapes.append({
+			'index' :face.idx(),
+			'edges' :shape_edges 
+		})
 	#create connectors for of non-boundary edges
-	connectors = []
-	for edge in mesh.edges():
-		if not mesh.is_boundary( edge ):
-			connectors.append(shaper.make_connectors({
-				'dihedral_angle': mesh.calc_dihedral_angle( edge ),
-				'length':         mesh.calc_edge_length( edge )
-			}))
-	open('shapes.svg',     'w').write(shaper.dump_svg(shapes))
-	open('connectors.svg', 'w').write(shaper.dump_svg(connectors))
+	return (shapes)
 
 if __name__ == "__main__":
 	config = json.loads(open(sys.argv[1]).read(-1))
 	shaper = Shaper(config)
 	inputfile = sys.argv[2]	
-	main( shaper, inputfile )
+	shapes = parse_mesh( inputfile )
+	open('shapes.svg',     'w').write(shaper.render_shapes(shapes))
+	open('connectors.svg', 'w').write(shaper.render_connectors(shapes))

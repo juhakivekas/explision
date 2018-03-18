@@ -46,3 +46,19 @@ Unfortunately I'm all up in other projects, but I'll give it some time.
 I actually finished this project and it turned out great!
 https://www.twitter.com/_guttula/status/847867130272002050
 I'm finally committing my changes to that were done for that project.
+
+Python rewrite
+--------------
+18.03.18 11:05
+The whole rewrite was dine during one weekend. Lots of code was just copied from the C version and even more was discarded because now real libraries can be used.
+OpenMesh is still used, now with Python bindings. Having to vompile these is a bit too much to ask so there's a shared object file in the repo.
+All of the existing features are present and a few changes and nice additions have been made:
+
+- boundary edges are clean now, no more unecessary holes
+- connector width can be adjusted, good for thin marerials
+- connectors are evenly spaced instead of there being an equsl amount of connectors per edge, helps with models where edge length varies greatly
+- a few special configurations for special situations
+- a reference 10mm square to help fix dpi issues
+
+I will no longer work on this project alone. The code is clean and structured enough to be maintained by others.
+Parinig to fix things makes sense so that not everything is dependend on me personally.

@@ -18,7 +18,7 @@ font_paths = {
 	'.':"m 0.75 2.5 l 0 0.75 m 0.75 -3.25 "	
 }
 
-def expfont(text):
+def explisionfont(text):
 	'''stand-alone function to make that sweet lasercutter font'''
 	chars = 0
 	d = "M 0 0"
