@@ -1,11 +1,7 @@
 ==========  TODO  =========== 
-
-add reference measurement of 10mm to files!
+add reference measurement of 10mm to files
 configure connectors to be on the inside/outside
-inset triangle edges - BROKEN
-checking that holes (and text) of triangles don't overlap
-Texture mapping (completely fucking awesome)
+inset triangle edges
+ensure that sockets and text of triangles don't overlap
+texture mapping (completely awesome)
 casting (in plaster)
-
-======== IN PROGRESS  ========
-
