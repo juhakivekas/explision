@@ -36,12 +36,12 @@ an edge. Defaults to ten times the material thickness.
 - `socket_margin` The  lower limit of how  close a socket can  be to a
 shape corner. Defaults to `socket_spacing`.
 
+- `socket_inset` The distance from the connector socket to the edge of
+the  face.  Defaults  to  material thickness.  This  does  not  affect
+connector shape in any way.
+
 -  `connector_width`  The width  of  the  connector in  the  direction
 perpendicular to the face edge. Defaults to material thickness.
-
-- `connector_inset` The distance from the connector socket to the edge
-of  the face.  Defaults to  material thickness.  This does  not affect
-connector shape in any way.
 
 -  `connector_margin` The  distance between  duplicate connectors.  If
 connectors overlap, then try playing with this.

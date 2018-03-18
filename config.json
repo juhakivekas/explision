@@ -1,5 +1,9 @@
 {
 	"material": 4.0,
 	"kerf":     0.16,
-	"connector_spacing": 20
+	"socket_spacing"  :null,
+	"socket_margin"   :null,
+	"socket_inset"    :null,
+	"connector_width" :null,
+	"connector_margin":null
 }

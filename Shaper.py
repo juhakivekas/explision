@@ -48,28 +48,28 @@ class Shaper():
 		else:
 			self.dpi = 90
 
-		if 'socket_spacing' in config:
+		if config['socket_spacing']:
 			self.socket_spacing = config['socket_spacing']
 		else:
 			self.socket_spacing = 10 * self.material
 		
-		if 'socket_margin' in config:
+		if config['socket_margin']:
 			self.socket_margin = config['socket_margin']
 		else:
 			self.socket_margin = self.socket_spacing
 
-		if 'connector_inset' in config:
-			self.connector_inset = config['connector_inset']
+		if config['socket_inset']:
+			self.socket_inset = config['socket_inset']
 		else:
-			self.connector_inset = self.material
+			self.socket_inset = self.material
 
 		self.connector_height = self.material
-		if 'connector_width' in config:
+		if config['connector_width']:
 			self.connector_width = config['connector_width']
 		else:
 			self.connector_width = self.connector_height
 
-		if 'connector_margin' in config:
+		if config['connector_margin']:
 			self.connector_margin = config['connector_margin']
 		else:
 			#some more sophisticated math could go here
@@ -89,7 +89,7 @@ class Shaper():
 
 	def make_edge_sockets(self, length):
 		'''make the sockets for connectors for a single edge of a shape'''
-		inset  = self.connector_inset  + self.kerf
+		inset  = self.socket_inset  + self.kerf
 		edge_w = self.connector_width  - self.kerf
 		edge_h = self.connector_height - self.kerf
 		socket_count = int((length - 2*self.socket_margin) / self.socket_spacing) + 1
@@ -156,7 +156,7 @@ class Shaper():
 		notes   = self.make_note(edges, index)
 		notes.set('transform', translate(
 			x = edges[0]['length']/2 -6,
-			y = self.connector_inset + self.connector_width
+			y = self.socket_inset + self.connector_width
 		))
 		shape = etree.Element('g')
 		shape.append(sockets)
