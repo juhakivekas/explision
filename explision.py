@@ -6,13 +6,10 @@
 #https://www.openmesh.org/intro/
 #https://www.openmesh.org/media/Documentations/OpenMesh-Doc-Latest/a00020.html
 #https://www.openmesh.org/media/Documentations/OpenMesh-Doc-Latest/index.html
-
-from openmesh import *
-from lxml import etree
 import sys
 import json
+from openmesh import *
 from Shaper import Shaper
-
 
 def main( shaper, inputfile ):
 	#read the mesh form the input file
@@ -28,7 +25,7 @@ def main( shaper, inputfile ):
 			adjacent_face = mesh.face_handle(mesh.opposite_halfedge_handle( halfedge ))
 			#if this looks like magic, then ask Juha or read OpenMesh docs
 			shape_edges.append({
-				'index'         :adjacent_face.idx(),
+				'adjacent_index':adjacent_face.idx(),
 				'length'        :mesh.calc_edge_length( edge ),
 				'sector_angle'  :mesh.calc_sector_angle( halfedge ),
 				'dihedral_angle':mesh.calc_dihedral_angle( edge ),
@@ -44,19 +41,8 @@ def main( shaper, inputfile ):
 				'dihedral_angle': mesh.calc_dihedral_angle( edge ),
 				'length':         mesh.calc_edge_length( edge )
 			}))
-	open('shapes.svg',    'w').write(dump_svg(shapes))
-	open('conectors.svg', 'w').write(dump_svg(connectors))
-
-def dump_svg(elements):
-	svg = etree.Element('svg')
-	svg.set('id', 'svg')
-	svg.set('version', '1.1')
-	svg.set('xmlns', 'http://www.w3.org/2000/svg')
-	svg.set('width', '300')
-	svg.set('height', '300')
-	for element in elements:
-		svg.append(element)
-	return etree.tostring(svg, pretty_print=True, encoding='utf8')
+	open('shapes.svg',     'w').write(shaper.dump_svg(shapes))
+	open('connectors.svg', 'w').write(shaper.dump_svg(connectors))
 
 if __name__ == "__main__":
 	config = json.loads(open(sys.argv[1]).read(-1))

@@ -6,62 +6,31 @@
 #https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
 #https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
 #https://www.w3.org/TR/SVG/paths.html
-from lxml import etree
 import math
+from lxml import etree
+from Font import expfont
 
-#this is a cool font, even if the paths look quite raw :P
-font_space = 0.5
-font_paths = {
-	'0':"m 0 3 l 1.5 -3 l 0 3 l -1.5 0 l 0 -3 l 1.5 0 ",
-	'1':"m 0.75 0 l 0 3 m 0.75 -3 ",
-	'2':"l 1.5 0 l 0 1.5 l -1.5 0 l 0 1.5 l 1.5 0 m 0 -3 ",
-	'3':"l 1.5 0 l -1.5 1.5 l 1.5 0 l 0 1.5 l -1.5 0 m 1.5 -3 ",
-	'4':"m 1.5 1.5 l -1.5 0 l 1.5 -1.5 l 0 3 m 0 -3 ",
-	'5':"m 1.5 0 l -1.5 0 l 0 1.5 l 1.5 0 l 0 1.5 h -1.5 m 1.5 -3 ",
-	'6':"m 1.5 0 l -1.5 0 l 0 3 l 1.5 0 l 0 -1.5 l -1.5 0 m 1.5 -1.5 ",
-	'7':"l 1.5 0 l -1.5 3 m 1.5 -3 ",
-	'8':"m 0 1.5 l 1.5 0 l 0 1.5 l -1.5 0 l 0 -3 l 1.5 0 l 0 1.5 m 0 -1.5 ",
-	'9':"m 1.5 1.5 l -1.5 0 l 0 -1.5 l 1.5 0 l 0 3 l -1.5 0 m 1.5 -3 ",
-	' ':"m 1.5 0 ",
-	'-':"m 0 1.5 l 1.5 0 m 0 -1.5 ",
-	'>':"l 1.5 1.5 l -1.5 1.5 m 1.5 -3 ",
-	'.':"m 0.75 2.5 l 0 0.75 m 0.75 -3.25 "	
-}
-
-def vector_font(text):
-	chars = 0
-	d = moveto(-6, 0)
-	for c in text:
-		if c == '\n':
-			d += moveto(-(1.5+font_space) * chars, 4, True)
-			chars = 0
-		else:
-			d += font_paths[c]
-			d += moveto(font_space, 0, True)
-			chars += 1
-	path = etree.Element('path')
-	path.set('d', d)
-	path.set('stroke', 'red')
-	path.set('stroke-width', '0.2')
-	path.set('fill', 'none')
-	return path
-
-def moveto(x, y, relative = False):
+def moveto(vec, relative = False):
+	'''a path move command as described in SVG specifivation'''
 	command = 'm' if relative else 'M'
-	return '{} {} {} '.format(command, x, y)
+	return '{} {} {} '.format(command, vec[0], vec[1])
 
-def lineto(x, y, relative = False):
+def lineto(vec, relative = False):
+	'''a path line command as described in SVG specifivation'''
 	command = 'l' if relative else 'L'
-	return '{} {} {} '.format(command, x, y)
+	return '{} {} {} '.format(command, vec[0], vec[1])
 
-def rotlineto(x, y, r):
+def rot(x, y, r):
+	'''applies a rotation matrix on a vector'''
+	#makes connector drawing much cleaner
+	#https://en.wikipedia.org/wiki/Rotation_matrix 
 	rx = x * math.cos(r) - y * math.sin(r)
 	ry = x * math.sin(r) + y * math.cos(r)
-	return lineto(rx, ry, True)
+	return (rx, ry)
 	
-
 class Shaper():
 	def __init__(self, config):
+		'''reads configurations and sets default values'''
 		self.material = config['material']
 		self.kerf     = config['kerf']
 		if 'dpi' in config:
@@ -86,7 +55,20 @@ class Shaper():
 		else:
 			self.connector_width = self.connector_height
 
+	def make_note(self, edges, index):
+		'''makes the necessary marking texts'''
+		text = '{:3d}-->\n'.format(index)
+		for edge in edges:
+			if edge['connected']:
+				text += '{:2d}{:4d}\n'.format(
+					edge['adjacent_index'],
+					int(180 * edge['dihedral_angle'] / math.pi))
+			else:
+				text += '------\n'
+		return expfont(text)
+
 	def make_edge_sockets(self, length):
+		'''make the sockets for connectors for a single edge of a shape'''
 		# XXX needs to be defensive (special cases for short edges)
 		inset  = self.connector_inset  + self.kerf
 		edge_w = self.connector_width  - self.kerf
@@ -94,20 +76,21 @@ class Shaper():
 		socket_count = int(length / self.connector_spacing)
 		x = (length - ((socket_count-1) * self.connector_spacing)) / 2
 		#move to middle of top edge of first socket
-		d = moveto(x, inset)
+		d = moveto((x, inset))
 		for i in range(0, socket_count):
 			# make a single socket
-			d += moveto(edge_h/2, 0, True)
-			d += lineto(0,  edge_w, True)
-			d += lineto(-edge_h, 0, True)
-			d += lineto(0, -edge_w, True)
-			d += lineto( edge_h, 0, True)
-			d += moveto(-edge_h/2, 0, True)
+			d += moveto((edge_h/2, 0), True)
+			d += lineto((0,  edge_w), True)
+			d += lineto((-edge_h, 0), True)
+			d += lineto((0, -edge_w), True)
+			d += lineto(( edge_h, 0), True)
+			d += moveto((-edge_h/2, 0), True)
 			# move to origin of next socket
-			d += moveto(self.connector_spacing, 0, True)
+			d += moveto((self.connector_spacing, 0), True)
 		return d
 
 	def make_sockets(self, edges):
+		'''make sockets for all edges of a shape'''
 		angle = 0; xpos = 0; ypos = 0
 		group = etree.Element('g')
 		for edge in edges:
@@ -130,13 +113,14 @@ class Shaper():
 		return group
 
 	def make_outline(self, edges):
+		'''draws a simple outline based on shape edges'''
 		xpos = 0; ypos = 0; angle = 0
-		d = moveto(0, 0)
+		d = moveto((0, 0))
 		for edge in edges:
 			xpos += math.cos(angle) * edge['length']
 			ypos += math.sin(angle) * edge['length']
 			angle += math.pi - edge['sector_angle']
-			d += lineto(xpos, ypos)
+			d += lineto((xpos, ypos))
 		path = etree.Element('path')
 		path.set('d', d)
 		path.set('stroke', 'black')
@@ -145,11 +129,12 @@ class Shaper():
 		return path
 
 	def shape(self, edges, index):
+		'''creates a shape based on edge information'''
 		outline = self.make_outline(edges)
 		sockets = self.make_sockets(edges)
-		notes = vector_font(self.make_note(edges, index))
+		notes   = self.make_note(edges, index)
 		notes.set('transform', 'translate({x},{y})'.format(
-			x = edges[0]['length']/2,
+			x = edges[0]['length']/2 -6,
 			y = self.connector_inset + self.connector_width
 		))
 		shape = etree.Element('g')
@@ -158,55 +143,37 @@ class Shaper():
 		shape.append(notes)
 		return shape
 
-	def make_note(self, edges, index):
-		text = '{:3d}-->\n'.format(index)
-		for edge in edges:
-			if edge['connected']:
-				text += '{:2d}{:4d}\n'.format(
-					edge['index'],
-					int(180 * edge['dihedral_angle'] / math.pi))
-			else:
-				text += '------\n'
-		return text
-
 	def make_connectors(self, edge):
-		connector_count = int(edge['length'] / self.connector_spacing)
+		'''makes the connector for an edge of a specified length'''
 		angle = edge['dihedral_angle']
-		group = etree.Element('g')
-		d = moveto(0, 2*self.material)
-		d += lineto(0, -2*self.material, True)
-		d += lineto(self.connector_width, 0, True)
-		d += lineto(0, self.material, True)
-		d += lineto(self.material, 0, True)
-		d += rotlineto(  self.material, 0, angle)
-		d += rotlineto(0,  -self.material, angle)
-		d += rotlineto(  self.material, 0, angle)
-		d += rotlineto(0, 2*self.material, angle)
+		d = moveto((0, self.connector_width + self.material))
+		d += lineto((0, -(self.connector_width + self.material)), True)
+		d += lineto((self.connector_width - self.kerf, 0), True)
+		d += lineto((0, self.material), True)
+		d += lineto((self.material, 0), True)
+		d += lineto(rot(self.material, 0, angle), True)
+		d += lineto(rot(0, -self.material, angle), True)
+		d += lineto(rot(self.connector_width - self.kerf, 0, angle), True)
+		d += lineto(rot(0, self.connector_width + self.material, angle), True)
 		d += 'z'
 		path = etree.Element('path')
 		path.set('stroke', 'black')
 		path.set('stroke-width', '0.2')
 		path.set('fill', 'none')
 		path.set('d', d)
-		return path
-		
-if __name__ == '__main__':
-	config = {
-		'material': 4,
-		'kerf': 0.20,
-		'connector_spacing' : 40,
-		'connector_width': 10
-	}
-	shaper = Shaper(config)
-	edges = [
-	{'length': 180,	'sector_angle': math.pi/3, 'dihedral_angle':math.pi/4},
-	{'length': 140, 'sector_angle': math.pi/3, 'dihedral_angle':math.pi/3},
-	{'length': 100, 'sector_angle': math.pi/3, 'dihedral_angle':math.pi/5},
-	]
-	svg = etree.Element('svg')
-	svg.set('width', "300")
-	svg.set('height', "300")
-	svg.append(shaper.shape(edges))
-	open('test.svg','w').write(
-		etree.tostring(svg, pretty_print=True).decode('utf8')
-	)
+		connector_count = int(edge['length'] / self.connector_spacing)
+		group = etree.Element('g')
+		for i in range(connector_count):
+			group.append(path)
+		return group
+
+	def dump_svg(self, elements):
+		svg = etree.Element('svg')
+		svg.set('id', 'svg')
+		svg.set('version', '1.1')
+		svg.set('xmlns', 'http://www.w3.org/2000/svg')
+		svg.set('width', '300')
+		svg.set('height', '300')
+		for element in elements:
+			svg.append(element)
+		return etree.tostring(svg, pretty_print=True, encoding='utf8')
